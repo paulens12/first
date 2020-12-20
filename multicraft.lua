@@ -165,8 +165,8 @@ function multicraft.craftCompactWall()
     robot.forward()
     robot.down()
     
-    print("sleeping for 15 seconds")
-    os.sleep(15)
+    print("sleeping for 5 seconds")
+    os.sleep(5)
     print("sleep done")
 
     pickUpItem(3, 15)
