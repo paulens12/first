@@ -183,7 +183,7 @@ function multicraft.craftNormalMachine()
         {{13, 13, 13}, {13, 15, 13}, {13, 13, 13}},
         {{13, 13, 13}, {13, 13, 13}, {13, 13, 13}}
     }
-    craftMultiblock(3, matrix, 14, 4, 20)
+    craftMultiblock(3, matrix, 14, 4, 25)
     return dumpSlot(4)
 end
 
