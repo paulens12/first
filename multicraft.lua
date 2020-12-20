@@ -12,21 +12,21 @@ local function takeItemsInternal(itemName, amount, side)
     local remaining = amount
     for i=1,inv.getInventorySize(side) do
         if remaining == 0 then return true end
-        -- term.write("check slot " .. i .. "\n")
+        -- print("check slot " .. i)
         local stack = inv.getStackInSlot(side, i)
         if stack ~= nil and stack.name == itemName then
             if stack.size > remaining then
                 inv.suckFromSlot(side, i, remaining)
-                term.write("taking " .. remaining .. " remaining items from slot " .. i .. "\n")
+                print("taking " .. remaining .. " remaining items from slot " .. i)
                 return true
             else
                 inv.suckFromSlot(side, i, stack.size)
                 remaining = remaining - stack.size
-                term.write("taking " .. stack.size .. " items from slot " .. i .. "\n")
+                print("taking " .. stack.size .. " items from slot " .. i)
             end
         end
     end
-    term.write("not enough items of type " .. itemName .. "\n")
+    print("not enough items of type " .. itemName)
     return false
 end
 
@@ -63,7 +63,7 @@ local function putLayer(size, matrix)
         for j=2,size do robot.forward() end
         for j=1,size do
             -- put one block
-            -- term.write(matrix[i][j] .. "\n")
+            -- print(matrix[i][j])
             if matrix[i][j] ~= 0 then
                 robot.select(matrix[i][j])
                 robot.place()
