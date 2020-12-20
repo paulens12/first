@@ -95,6 +95,19 @@ local function dumpSlot(slot, side)
     return true
 end
 
+local function pickUpItem(size, suckIndex)
+    robot.turnRight()
+    for i=1, (size - 1) / 2 do robot.forward() end
+    robot.turnLeft()
+    for i=1, (size - 1) / 2 do robot.forward() end
+    robot.select(suckIndex)
+    robot.suck()
+    for i=1, (size - 1) / 2 do robot.back() end
+    robot.turnLeft()
+    for i=1, (size - 1) / 2 do robot.forward() end
+    robot.turnRight()
+end
+
 local function craftMultiblock(size, matrix, dropIndex, suckIndex, duration)
     walkToGrid()
     for i=1,size do
@@ -110,17 +123,7 @@ local function craftMultiblock(size, matrix, dropIndex, suckIndex, duration)
     os.sleep(duration)
     print("sleep done")
 
-    robot.turnRight()
-    for i=1, (size - 1) / 2 do robot.forward() end
-    robot.turnLeft()
-    for i=1, (size - 1) / 2 do robot.forward() end
-    robot.select(suckIndex)
-    robot.suck()
-    for i=1, (size - 1) / 2 do robot.back() end
-    robot.turnLeft()
-    for i=1, (size - 1) / 2 do robot.forward() end
-    robot.turnRight()
-
+    pickUpItem(size, suckIndex)
     walkToStart()
 end
 
@@ -162,13 +165,13 @@ function multicraft.craftCompactWall()
     robot.forward()
     robot.down()
     
-    print("sleeping for 20 seconds")
-    os.sleep(20)
+    print("sleeping for 15 seconds")
+    os.sleep(15)
     print("sleep done")
 
-    robot.suck()
-    robot.walkToStart()
-    return dumpSlot(14)
+    pickUpItem(3, 15)
+    walkToStart()
+    return dumpSlot(15)
 end
 
 local function invHasAmount(side, itemName, amount)
