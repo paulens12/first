@@ -150,6 +150,19 @@ function multicraft.craftEnderPearl()
     return dumpSlot(4)
 end
 
+function multicraft.craftNormalMachine()
+    if takeItems("minecraft:gold_block", 1, 15, sides.front) == false then return false end
+    if takeItems("minecraft:ender_pearl", 1, 14, sides.front) == false then return false end
+    if takeItems("compactmachines3:wallbreakable", 26, 13, sides.front) == false then return false end
+
+    local matrix = {
+        {{13, 13, 13}, {13, 13, 13}, {13, 13, 13}},
+        {{13, 13, 13}, {13, 15, 13}, {13, 13, 13}},
+        {{13, 13, 13}, {13, 13, 13}, {13, 13, 13}}
+    }
+    craftMultiblock(3, matrix, 14, 4, 20)
+end
+
 function multicraft.craftCompactWall()
     if takeItems("minecraft:iron_block", 1, 13, sides.front) == false then return false end
     if takeItems("minecraft:redstone", 2, 14, sides.front) == false then return false end
