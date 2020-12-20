@@ -6,7 +6,9 @@ local inv = component.inventory_controller
 local craft = component.crafting.craft
 local serialization = require("serialization")
 
-function takeItemsInternal(itemName, amount, side)
+local multicraft = {}
+
+local function takeItemsInternal(itemName, amount, side)
     local remaining = amount
     for i=1,inv.getInventorySize(side) do
         if remaining == 0 then return true end
@@ -28,20 +30,16 @@ function takeItemsInternal(itemName, amount, side)
     return false
 end
 
-function takeItems(itemName, amount, slot, side)
+local function takeItems(itemName, amount, slot, side)
     local beforeSelection = robot.select()
     robot.select(slot)
-    waitForInventory(side, itemName, amount)
+    -- waitForInventory(side, itemName, amount)
     local ret = takeItemsInternal(itemName, amount, side)
     robot.select(beforeSelection)
     return ret
 end
 
--- robot.select(16)
--- local item = inv.getStackInInternalSlot().name
--- term.write(item .. "\n")
-
-function walkToGrid()
+local function walkToGrid()
     robot.turnRight()
     robot.forward()
     robot.forward()
@@ -50,7 +48,7 @@ function walkToGrid()
     robot.forward()
 end
 
-function walkToStart()
+local function walkToStart()
     robot.back()
     robot.back()
     robot.turnLeft()
@@ -59,7 +57,45 @@ function walkToStart()
     robot.turnRight()
 end
 
-function craftMultiblock(size, matrix, dropIndex, suckIndex, duration)
+local function putLayer(size, matrix)
+    for i=1,size do
+        -- put one line
+        for j=2,size do robot.forward() end
+        for j=1,size do
+            -- put one block
+            -- term.write(matrix[i][j] .. "\n")
+            if matrix[i][j] ~= 0 then
+                robot.select(matrix[i][j])
+                robot.place()
+            end
+            -- move
+            if j ~= size then robot.back() end
+        end
+        -- move to start of next row
+        if i ~= size then
+            robot.turnRight()
+            robot.forward()
+            robot.turnLeft()
+        end
+    end
+    robot.turnLeft()
+    for i=2,size do robot.forward() end
+    robot.turnRight()
+end
+
+local function dumpSlot(slot, side)
+    robot.select(slot)
+    robot.drop()
+    
+    local localStack = inv.getStackInInternalSlot(slot)
+    if localStack ~= nil then
+        term.write("not enough space in inventory!")
+        return false
+    end
+    return true
+end
+
+local function craftMultiblock(size, matrix, dropIndex, suckIndex, duration)
     walkToGrid()
     for i=1,size do
         putLayer(size, matrix[i])
@@ -88,50 +124,13 @@ function craftMultiblock(size, matrix, dropIndex, suckIndex, duration)
     walkToStart()
 end
 
-function putLayer(size, matrix)
-    for i=1,size do
-        -- put one line
-        for j=2,size do robot.forward() end
-        for j=1,size do
-            -- put one block
-            -- term.write(matrix[i][j] .. "\n")
-            if matrix[i][j] ~= 0 then
-                robot.select(matrix[i][j])
-                robot.place()
-            end
-            -- move
-            if j ~= size then robot.back() end
-        end
-        -- move to start of next row
-        if i ~= size then
-            robot.turnRight()
-            robot.forward()
-            robot.turnLeft()
-        end
-    end
-    robot.turnLeft()
-    for i=2,size do robot.forward() end
-    robot.turnRight()
-end
-
-function dumpSlot(slot, side)
-    robot.select(slot)
-    robot.drop()
-    
-    local localStack = robot.getStackInInternalSlot(slot)
-    if localStack ~= nil then
-        term.write("not enough space in inventory!")
-        return false
-    end
-    return true
-end
-
-function craftEnderPearl()
+function multicraft.craftEnderPearl()
     local matrix = {
         {{13, 13, 13}, {13, 13, 13}, {13, 13, 13}},
         {{13, 13, 13}, {13, 15, 13}, {13, 13, 13}},
         {{13, 13, 13}, {13, 13, 13}, {13, 13, 13}}
     }
+    term.write("initialized matrix")
     if takeItems("minecraft:obsidian", 26, 13, sides.front) == false then return end
     if takeItems("minecraft:redstone", 10, 14, sides.front) == false then return end
     robot.select(14)
@@ -148,20 +147,27 @@ function craftEnderPearl()
     return dumpSlot(4)
 end
 
-function invHasAmount(side, itemName, amount)
+local function invHasAmount(side, itemName, amount)
     local remaining = amount
-    for i=0, inv.getInventorySize(side) do
+    term.write("checking if inventory has enough items\n")
+    for i=1, inv.getInventorySize(side) do
         if remaining == 0 then return true end
         local stack = inv.getStackInSlot(side, i)
         if stack ~= nil and stack.name == itemName then
-            if stack.size > remaining then return true
-            else remaining = remaining - stack.size end
+            if stack.size > remaining then
+                term.write(stack.size .. "\n")
+                return true
+            else
+                remaining = remaining - stack.size
+            end
         end
     end
     return false
 end
 
-function waitForInventory(side, itemName, amount)
+local function waitForInventory(side, itemName, amount)
     term.write("Waiting for " .. amount .. "x " .. itemName)
     while invHasAmount(side, itemName, amount) == false do os.sleep(1) end
 end
+
+return multicraft
