@@ -127,6 +127,29 @@ local function craftMultiblock(size, matrix, dropIndex, suckIndex, duration)
     walkToStart()
 end
 
+local function invHasAmount(side, itemName, amount)
+    local remaining = amount
+    print("checking if inventory has enough items")
+    for i=1, inv.getInventorySize(side) do
+        if remaining == 0 then return true end
+        local stack = inv.getStackInSlot(side, i)
+        if stack ~= nil and stack.name == itemName then
+            if stack.size > remaining then
+                print(stack.size)
+                return true
+            else
+                remaining = remaining - stack.size
+            end
+        end
+    end
+    return false
+end
+
+local function waitForInventory(side, itemName, amount)
+    print("Waiting for " .. amount .. "x " .. itemName)
+    while invHasAmount(side, itemName, amount) == false do os.sleep(1) end
+end
+
 function multicraft.craftEnderPearl()
     local matrix = {
         {{13, 13, 13}, {13, 13, 13}, {13, 13, 13}},
@@ -186,29 +209,6 @@ function multicraft.craftCompactWall()
     pickUpItem(3, 15)
     walkToStart()
     return dumpSlot(15)
-end
-
-local function invHasAmount(side, itemName, amount)
-    local remaining = amount
-    print("checking if inventory has enough items")
-    for i=1, inv.getInventorySize(side) do
-        if remaining == 0 then return true end
-        local stack = inv.getStackInSlot(side, i)
-        if stack ~= nil and stack.name == itemName then
-            if stack.size > remaining then
-                print(stack.size)
-                return true
-            else
-                remaining = remaining - stack.size
-            end
-        end
-    end
-    return false
-end
-
-local function waitForInventory(side, itemName, amount)
-    print("Waiting for " .. amount .. "x " .. itemName)
-    while invHasAmount(side, itemName, amount) == false do os.sleep(1) end
 end
 
 return multicraft
