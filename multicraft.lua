@@ -89,7 +89,7 @@ local function dumpSlot(slot, side)
     
     local localStack = inv.getStackInInternalSlot(slot)
     if localStack ~= nil then
-        term.write("not enough space in inventory!")
+        print("not enough space in inventory!")
         return false
     end
     return true
@@ -106,9 +106,9 @@ local function craftMultiblock(size, matrix, dropIndex, suckIndex, duration)
     robot.drop(1)
     for i=0,size do robot.down() end
 
-    term.write("sleeping for " .. duration .. " seconds\n")
+    print("sleeping for " .. duration .. " seconds")
     os.sleep(duration)
-    term.write("sleep done\n")
+    print("sleep done")
 
     robot.turnRight()
     for i=1, (size - 1) / 2 do robot.forward() end
@@ -130,7 +130,7 @@ function multicraft.craftEnderPearl()
         {{13, 13, 13}, {13, 15, 13}, {13, 13, 13}},
         {{13, 13, 13}, {13, 13, 13}, {13, 13, 13}}
     }
-    term.write("initialized matrix")
+    print("initialized matrix")
     if takeItems("minecraft:obsidian", 26, 13, sides.front) == false then return end
     if takeItems("minecraft:redstone", 10, 14, sides.front) == false then return end
     robot.select(14)
@@ -149,13 +149,13 @@ end
 
 local function invHasAmount(side, itemName, amount)
     local remaining = amount
-    term.write("checking if inventory has enough items\n")
+    print("checking if inventory has enough items")
     for i=1, inv.getInventorySize(side) do
         if remaining == 0 then return true end
         local stack = inv.getStackInSlot(side, i)
         if stack ~= nil and stack.name == itemName then
             if stack.size > remaining then
-                term.write(stack.size .. "\n")
+                print(stack.size)
                 return true
             else
                 remaining = remaining - stack.size
@@ -166,7 +166,7 @@ local function invHasAmount(side, itemName, amount)
 end
 
 local function waitForInventory(side, itemName, amount)
-    term.write("Waiting for " .. amount .. "x " .. itemName)
+    print("Waiting for " .. amount .. "x " .. itemName)
     while invHasAmount(side, itemName, amount) == false do os.sleep(1) end
 end
 
