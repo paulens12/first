@@ -161,6 +161,7 @@ function multicraft.craftNormalMachine()
         {{13, 13, 13}, {13, 13, 13}, {13, 13, 13}}
     }
     craftMultiblock(3, matrix, 14, 4, 20)
+    return dumpSlot(4)
 end
 
 function multicraft.craftCompactWall()
