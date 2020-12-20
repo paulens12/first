@@ -131,8 +131,8 @@ function multicraft.craftEnderPearl()
         {{13, 13, 13}, {13, 13, 13}, {13, 13, 13}}
     }
     print("initialized matrix")
-    if takeItems("minecraft:obsidian", 26, 13, sides.front) == false then return end
-    if takeItems("minecraft:redstone", 10, 14, sides.front) == false then return end
+    if takeItems("minecraft:obsidian", 26, 13, sides.front) == false then return false end
+    if takeItems("minecraft:redstone", 10, 14, sides.front) == false then return false end
     robot.select(14)
     for i=0,2 do
         for j=1,3 do
@@ -145,6 +145,30 @@ function multicraft.craftEnderPearl()
     
     craftMultiblock(3, matrix, 14, 4, 12)
     return dumpSlot(4)
+end
+
+function multicraft.craftCompactWall()
+    if takeItems("minecraft:iron_block", 1, 13, sides.front) == false then return false end
+    if takeItems("minecraft:redstone", 2, 14, sides.front) == false then return false end
+    walkToGrid()
+
+    robot.select(13)
+    robot.place()
+    robot.up()
+    robot.select(14)
+    robot.place()
+    robot.back()
+    robot.drop()
+    robot.forward()
+    robot.down()
+    
+    print("sleeping for 20 seconds")
+    os.sleep(20)
+    print("sleep done")
+
+    robot.suck()
+    robot.walkToStart()
+    return dumpSlot(14)
 end
 
 local function invHasAmount(side, itemName, amount)
