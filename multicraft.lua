@@ -114,10 +114,12 @@ local function craftMultiblock(size, matrix, dropIndex, suckIndex, duration, tot
         putLayer(size, matrix[i])
         robot.up()
     end
-    robot.up()
+    robot.back()
     robot.select(dropIndex)
     robot.drop(1)
-    for i=0,size do robot.down() end
+    robot.forward()
+    for i=1,size do robot.down() end
+    
 
     print("sleeping for " .. duration .. " seconds")
     os.sleep(duration)
