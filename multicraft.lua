@@ -108,7 +108,7 @@ local function pickUpItem(size, suckIndex)
     robot.turnRight()
 end
 
-local function craftMultiblock(size, matrix, dropIndex, suckIndex, duration)
+local function craftMultiblock(size, matrix, dropIndex, suckIndex, duration, totalSize)
     walkToGrid()
     for i=1,size do
         putLayer(size, matrix[i])
@@ -123,7 +123,7 @@ local function craftMultiblock(size, matrix, dropIndex, suckIndex, duration)
     os.sleep(duration)
     print("sleep done")
 
-    pickUpItem(size, suckIndex)
+    pickUpItem(totalSize, suckIndex)
     walkToStart()
 end
 
@@ -150,7 +150,7 @@ local function waitForInventory(side, itemName, amount)
     while invHasAmount(side, itemName, amount) == false do os.sleep(1) end
 end
 
-function multicraft.craftEnderPearl()
+function multicraft.craftEnderPearl(totalSize)
     local matrix = {
         {{13, 13, 13}, {13, 13, 13}, {13, 13, 13}},
         {{13, 13, 13}, {13, 15, 13}, {13, 13, 13}},
@@ -169,11 +169,11 @@ function multicraft.craftEnderPearl()
     robot.select(15)
     craft(1)
     
-    craftMultiblock(3, matrix, 14, 4, 12)
+    craftMultiblock(3, matrix, 14, 4, 12, totalSize)
     return dumpSlot(4)
 end
 
-function multicraft.craftNormalMachine()
+function multicraft.craftNormalMachine(totalSize)
     if takeItems("minecraft:gold_block", 1, 15, sides.front) == false then return false end
     if takeItems("minecraft:ender_pearl", 1, 14, sides.front) == false then return false end
     if takeItems("compactmachines3:wallbreakable", 26, 13, sides.front) == false then return false end
@@ -183,11 +183,11 @@ function multicraft.craftNormalMachine()
         {{13, 13, 13}, {13, 15, 13}, {13, 13, 13}},
         {{13, 13, 13}, {13, 13, 13}, {13, 13, 13}}
     }
-    craftMultiblock(3, matrix, 14, 4, 25)
+    craftMultiblock(3, matrix, 14, 4, 25, totalSize)
     return dumpSlot(4)
 end
 
-function multicraft.craftCompactWall()
+function multicraft.craftCompactWall(totalSize)
     if takeItems("minecraft:iron_block", 1, 13, sides.front) == false then return false end
     if takeItems("minecraft:redstone", 2, 14, sides.front) == false then return false end
     walkToGrid()
@@ -206,7 +206,7 @@ function multicraft.craftCompactWall()
     os.sleep(5)
     print("sleep done")
 
-    pickUpItem(3, 15)
+    pickUpItem(totalSize, 15)
     walkToStart()
     return dumpSlot(15)
 end
