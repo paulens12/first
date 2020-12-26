@@ -214,8 +214,8 @@ function multicraft.craftCompactWall(totalSize)
 end
 
 function multicraft.craftLargeMachine(totalSize)
-    if takeItems("comactmachines3:wallbreakable", 64, 13, sides.front) == false then return false end
-    if takeItems("comactmachines3:wallbreakable", 34, 14, sides.front) == false then return false end
+    if takeItems("compactmachines3:wallbreakable", 64, 13, sides.front) == false then return false end
+    if takeItems("compactmachines3:wallbreakable", 34, 14, sides.front) == false then return false end
     if takeItems("minecraft:ender_pearl", 1, 15, sides.front) == false then return false end
     
     local matrix = {
