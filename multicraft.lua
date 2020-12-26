@@ -213,4 +213,20 @@ function multicraft.craftCompactWall(totalSize)
     return dumpSlot(15)
 end
 
+function multicraft.craftLargeMachine(totalSize)
+    if takeItems("comactmachines3:wallbreakable", 64, 13, sides.front) == false then return false end
+    if takeItems("comactmachines3:wallbreakable", 34, 14, sides.front) == false then return false end
+    if takeItems("minecraft:ender_pearl", 1, 15, sides.front) == false then return false end
+    
+    local matrix = {
+        {{13, 13, 13, 13, 13}, {13, 13, 13, 13, 13}, {13, 13, 13, 13, 13}, {13, 13, 13, 13, 13}, {13, 13, 13, 13, 13}}, -- 25
+        {{13, 13, 13, 13, 13}, {13, 0, 0, 0, 13}, {13, 0, 0, 0, 13}, {13, 0, 0, 0, 13}, {13, 13, 13, 13, 13}}, -- 16
+        {{13, 13, 13, 13, 13}, {13, 0, 0, 0, 13}, {13, 0, 0, 0, 13}, {13, 0, 0, 0, 13}, {13, 13, 13, 13, 13}}, -- 16
+        {{13, 13, 13, 13, 13}, {13, 0, 0, 0, 13}, {14, 0, 0, 0, 14}, {14, 0, 0, 0, 14}, {14, 14, 14, 14, 14}}, -- 7 + 9
+        {{14, 14, 14, 14, 14}, {14, 14, 14, 14, 14}, {14, 14, 14, 14, 14}, {14, 14, 14, 14, 14}, {14, 14, 14, 14, 14}} -- 25
+    }
+    craftMultiblock(5, matrix, 15, 16, 30, totalSize)
+    return dumpSlot(16)
+end
+
 return multicraft
