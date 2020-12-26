@@ -225,7 +225,7 @@ function multicraft.craftLargeMachine(totalSize)
         {{13, 13, 13, 13, 13}, {13, 0, 0, 0, 13}, {14, 0, 0, 0, 14}, {14, 0, 0, 0, 14}, {14, 14, 14, 14, 14}}, -- 7 + 9
         {{14, 14, 14, 14, 14}, {14, 14, 14, 14, 14}, {14, 14, 14, 14, 14}, {14, 14, 14, 14, 14}, {14, 14, 14, 14, 14}} -- 25
     }
-    craftMultiblock(5, matrix, 15, 16, 30, totalSize)
+    craftMultiblock(5, matrix, 15, 16, 25, totalSize)
     return dumpSlot(16)
 end
 
